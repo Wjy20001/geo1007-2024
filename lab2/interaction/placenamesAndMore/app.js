@@ -96,27 +96,56 @@ var allFunctions = function () {
   // document.addEventListener("DOMContentLoaded", allFunctions);
 
   //   "use strict";
+  //var anotherGeonamesRequest = function (latitude, longitude) {
+  //  var baseUrl =
+  //    "http://api.geonames.org/findNearestIntersectionOSM?username=bktudelft";
+  //  var params = "&lat=" + latitude + "&lng=" + longitude;
+  //  var requestUrl = baseUrl + params;
+  //  var request = new XMLHttpRequest();
+  //  request.open("GET", requestUrl, true);
+  //  request.onload = function () {
+  //    if (this.status >= 200 && this.status < 400) {
+  //      var textarea = document.createElement("textarea");
+  //      textarea.rows = "20";
+  //      textarea.cols = "60";
+  //      textarea.style.border = "solid 1px black";
+  //      textarea.textContent = this.responseText;
+  //      document.querySelector("main .forDebug2").append(textarea);
+  //      var xmlData = this.responseXML;
+  //      handleXMLResponse(xmlData);
+  //    } else {
+  //      document
+  //        .querySelector("main .messages")
+  //        .append("target server reached but unknown error");
+  //    }
+  //  };
+  //  request.onerror = function () {
+  //    document.querySelector("main .messages").append("connection error");
+  //  };
+
+  //  request.send();
+  //};
+
   var anotherGeonamesRequest = function (latitude, longitude) {
-    var baseUrl =
-      "http://api.geonames.org/findNearestIntersectionOSM?username=bktudelft";
+    var baseUrl = "http://api.geonames.org/findNearestIntersectionOSM?username=bktudelft";
     var params = "&lat=" + latitude + "&lng=" + longitude;
     var requestUrl = baseUrl + params;
     var request = new XMLHttpRequest();
     request.open("GET", requestUrl, true);
     request.onload = function () {
       if (this.status >= 200 && this.status < 400) {
+        document.querySelector("main .forDebug2").innerHTML = ''; // Clear existing XML output
+        document.querySelector("#xmlDataAsTable").innerHTML = ''; // Clear existing table
         var textarea = document.createElement("textarea");
         textarea.rows = "20";
         textarea.cols = "60";
         textarea.style.border = "solid 1px black";
         textarea.textContent = this.responseText;
-        document.querySelector("main .forDebug2").append(textarea);
+        document.querySelector("main .forDebug2").appendChild(textarea);
         var xmlData = this.responseXML;
         handleXMLResponse(xmlData);
       } else {
-        document
-          .querySelector("main .messages")
-          .append("target server reached but unknown error");
+        document.querySelector("main .messages").append("target server reached but unknown error");
       }
     };
     request.onerror = function () {
@@ -125,6 +154,7 @@ var allFunctions = function () {
 
     request.send();
   };
+
 
   var handleXMLResponse = function (data) {
     var feature = data.getElementsByTagName("intersection")[0];
@@ -154,11 +184,20 @@ var allFunctions = function () {
     }
   };
 
+  //var getAndDisplayMap = function (wms_request) {
+  //  var img = document.createElement("img");
+  //  img.style.display = "none";
+  //  img.src = wms_request;
+  //  document.querySelector("main .mapDiv").append(img);
+  //  img.style.display = "block";
+  //};
+
   var getAndDisplayMap = function (wms_request) {
+    var mapDiv = document.querySelector("main .mapDiv");
+    mapDiv.innerHTML = '';  // Clear existing maps before appending new ones
     var img = document.createElement("img");
-    img.style.display = "none";
     img.src = wms_request;
-    document.querySelector("main .mapDiv").append(img);
+    mapDiv.appendChild(img);
     img.style.display = "block";
   };
 
