@@ -47,9 +47,9 @@ var map = L.map("map-canvas", {
 
 // 2. aerial photo * not working at this moment (see Assignment)
 //    - can be switched on/off by toggle thru L.control.layers (see below in this script)
-var wms_aerial_url = "https://geodata1.nationaalgeoregister.nl/luchtfoto/wms?";
+var wms_aerial_url = "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0?";
 var basemap_aerial = new L.tileLayer.wms(wms_aerial_url, {
-  layers: ["luchtfoto_png"],
+    layers: ["2023_ortho25"],
   styles: "",
   format: "image/png",
   transparent: true,
@@ -71,8 +71,38 @@ var sound = new L.tileLayer.wms(wms_sound_url, {
   pointerCursor: true,
 });
 
+var pdokLayer = new L.tileLayer.wms("https://service.pdok.nl/cbs/vierkantstatistieken100m/2022/wms/v1_0?request=GetCapabilities&service=WMS", {
+    layers: "vierkant_100m",
+    styles: "cbsvierkant100m_aantal_inwoners",
+    format: "image/png",
+    transparent: true,
+    attribution: "AdministrativeUnit, geharmoniseerd voor INSPIRE.",
+    pointerCursor: true,
+});
+
+var nycBuildings = new L.tileLayer.wms("http://localhost:8080/geoserver/nyc/wms", {
+    layers: 'nyc:nyc_buildings',
+    styles: "",
+    format: "image/png",
+    transparent: true,
+    attribution: "Buildings",
+    pointerCursor: true,
+});
+
+var top10nlLayers = new L.tileLayer.wms("http://localhost:8080/geoserver/nyc/wms", {
+    layers: ['nyc:GEBOUW_VLAK', 'nyc:TERREIN_VLAK'],
+    styles: ['gebouw_vlak', 'terrein_vlak'],
+    format: "image/png",
+    transparent: true,
+    attribution: "Top10NL Data",
+    pointerCursor: true,
+});
+
 var overlays = {
-  "Road noise [WMS]": sound,
+    "Road noise [WMS]": sound,
+    "Buildings": nycBuildings,
+    "Top10NL Layers": top10nlLayers,
+    "CBS Vierkantstatistieken 100m": pdokLayer
 };
 
 var baseLayers = {
